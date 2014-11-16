@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+  <head lang="en">
+    <meta charset="UTF-8">
+    <title>DEMO 01</title>
+    <script src="../src/aes.js"></script>
+    <script src="../src/aes-ctr.js"></script>
+    <script>
+      // Get data from form
+      function getFormData() {
+        return {
+          keySize: parseInt(document.getElementById('key-size').value),
+          secretKey: document.getElementById('secret-key').value,
+          plaintext: document.getElementById('plaintext').value,
+          encryptedText: document.getElementById('encrypted-text').value
+        }
+      }
+      // Update form
+      function setFormData(data) {
+        document.getElementById('key-size').value = data.keySize;
+        document.getElementById('secret-key').value = data.secretKey;
+        document.getElementById('plaintext').value = data.plaintext;
+        document.getElementById('encrypted-text').value = data.encryptedText;
+      }
+      // On document ready
+      document.addEventListener('DOMContentLoaded', function() {
+        // On encrypt button click
+        document.getElementById('encrypt-btn').addEventListener('click', function(event) {
+          event.preventDefault();
+          var data = getFormData();
+          data.encryptedText = Aes.Ctr.encrypt(data.plaintext, data.secretKey, data.keySize);
+          setFormData(data);
+        });
+        // On decrypt button click
+        document.getElementById('decrypt-btn').addEventListener('click', function(event) {
+          event.preventDefault();
+          var data = getFormData();
+          data.plaintext = Aes.Ctr.decrypt(data.encryptedText, data.secretKey, data.keySize);
+          setFormData(data);
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <form>
+      <fieldset>
+        <legend>AES Encrypt / Decrypt</legend>
+        <!-- Key size -->
+        <p>
+          <label for="key-size">Key size (in bits):</label>
+          <select id="key-size">
+            <option value="128" selected>128</option>
+            <option value="192">192</option>
+            <option value="256">256</option>
+          </select>
+        </p>
+        <!-- Secret key -->
+        <p>
+          <label for="secret-key">Secret key:</label>
+          <input type="text" id="secret-key" required>
+        </p>
+        <!-- Plaintext -->
+        <p>
+          <label for="plaintext">Plaintext:</label>
+          <input type="text" id="plaintext">
+        </p>
+        <!-- Encrypted text -->
+        <p>
+          <label for="encrypted-text">Encrypted text:</label>
+          <input type="text" id="encrypted-text">
+        </p>
+        <!-- Control buttons -->
+        <p>
+          <button type="reset">Clear</button>
+          <button type="button" id="encrypt-btn">Encrypt</button>
+          <button type="button" id="decrypt-btn">Decrypt</button>
+        </p>
+      </fieldset>
+    </form>
+  </body>
+</html>
